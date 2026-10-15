@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-15T10:29:39.242056Z",
+ "updated": "2026-10-15T10:31:30.550753+00:00",
  "traders": [
   {
    "handle": "Quanterty",
@@ -42,13 +42,6 @@
    "size": "25% of buy, max $3",
    "chains": "7 chains",
    "note": "#44 7D, 50% win"
-  },
-  {
-   "handle": "leo",
-   "status": "paused",
-   "size": "10% of buy",
-   "chains": "",
-   "note": ""
   }
  ]
 }
