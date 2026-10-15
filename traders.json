@@ -1,7 +1,54 @@
-{"updated":"2026-10-15T10:23:16Z","traders":[
-{"handle":"Quanterty","status":"live","size":"25% of buy, max $3","chains":"7 chains","note":""},
-{"handle":"Oura456","status":"live","size":"25% of buy, max $3","chains":"Solana only","note":""},
-{"handle":"Hifive_07","status":"live","size":"25% of buy, max $3","chains":"7 chains","note":""},
-{"handle":"aiwass","status":"live","size":"25% of buy, max $3","chains":"7 chains","note":""},
-{"handle":"sugar","status":"live","size":"25% of buy, max $3","chains":"7 chains","note":"#45 7D, 64% win"},
-{"handle":"leo","status":"paused","size":"10% of buy","chains":"","note":""}]}
+{
+ "updated": "2026-10-15T10:29:39.242056Z",
+ "traders": [
+  {
+   "handle": "Quanterty",
+   "status": "live",
+   "size": "25% of buy, max $3",
+   "chains": "7 chains",
+   "note": ""
+  },
+  {
+   "handle": "Oura456",
+   "status": "live",
+   "size": "25% of buy, max $3",
+   "chains": "Solana only",
+   "note": ""
+  },
+  {
+   "handle": "Hifive_07",
+   "status": "live",
+   "size": "25% of buy, max $3",
+   "chains": "7 chains",
+   "note": ""
+  },
+  {
+   "handle": "aiwass",
+   "status": "live",
+   "size": "25% of buy, max $3",
+   "chains": "7 chains",
+   "note": ""
+  },
+  {
+   "handle": "sugar",
+   "status": "live",
+   "size": "25% of buy, max $3",
+   "chains": "7 chains",
+   "note": "#45 7D, 64% win"
+  },
+  {
+   "handle": "adolf",
+   "status": "live",
+   "size": "25% of buy, max $3",
+   "chains": "7 chains",
+   "note": "#44 7D, 50% win"
+  },
+  {
+   "handle": "leo",
+   "status": "paused",
+   "size": "10% of buy",
+   "chains": "",
+   "note": ""
+  }
+ ]
+}
