@@ -88,7 +88,34 @@ function render(items, errs) {
   }).join("") : `<div class="sub">No positions</div>`;
 }
 
+let lastTraders = null;
+async function loadTraders() {
+  const esc = s => String(s ?? "").replace(/[&<>"]/g, m => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[m]));
+  try {
+    const r = await fetch("traders.json", { cache: "no-store" });
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    lastTraders = await r.json();
+    $("copywarn").style.display = "none";
+  } catch (e) {
+    $("copywarn").style.display = "block";
+    $("copywarn").textContent = "⚠️ Couldn't load traders list" + (lastTraders ? " — showing last loaded." : ".") + " (" + (e.message || e) + ")";
+    if (!lastTraders) { $("copylist").innerHTML = ""; return; }
+  }
+  const ts = (lastTraders.traders || []).slice().sort((a, b) => (a.status === "live" ? 0 : 1) - (b.status === "live" ? 0 : 1));
+  const live = ts.filter(t => t.status === "live").length;
+  $("copyhd").textContent = `Copying · ${live} live`;
+  $("copylist").innerHTML = ts.length ? ts.map((t, i) => {
+    const on = t.status === "live";
+    return `<div class="tr${i ? "" : " first"}${on ? "" : " paused"}"><div class="mid"><div class="sym">@${esc(t.handle)}</div>
+      <div class="sub">${esc([t.size, t.chains].filter(Boolean).join(" · "))}${t.note ? " · " + esc(t.note) : ""}</div></div>
+      <span class="pill ${on ? "up" : "nu"}">${on ? "Live" : "Paused"}</span></div>`;
+  }).join("") : `<div class="sub">No traders</div>`;
+  const u = lastTraders.updated ? new Date(lastTraders.updated) : null;
+  $("copyfoot").textContent = u && !isNaN(u) ? "Updated " + u.toLocaleString([], { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }) : "";
+}
+
 async function refresh() {
+  loadTraders();
   $("ref").textContent = "↻ …";
   const res = await Promise.allSettled([loadSolana(), loadEvm()]);
   const errs = res.filter(r => r.status === "rejected").map(r => r.reason?.message || r.reason);
