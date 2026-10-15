@@ -1,5 +1,5 @@
 // ===== Config (edit me) =====
-const DEPOSITED_USD = 35.00;
+const DEPOSITED_USD = 39.82;
 const SOL_WALLET = "7BQKwDkic5gjQmFRJwiAr7P4KrYzAmBHUEaCv7yXb4sP";
 const EVM_WALLET = "0x789d01bc529eE2346A4F6abF78a6D37F1B3B770B";
 const REFRESH_MS = 15000;
