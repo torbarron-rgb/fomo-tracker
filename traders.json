@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-15T10:31:30.550753+00:00",
+ "updated": "2026-10-15T12:44:56.474992+00:00",
  "traders": [
   {
    "handle": "Quanterty",
@@ -37,11 +37,11 @@
    "note": "#45 7D, 64% win"
   },
   {
-   "handle": "adolf",
+   "handle": "UltraMegaWizard",
    "status": "live",
    "size": "25% of buy, max $3",
    "chains": "7 chains",
-   "note": "#44 7D, 50% win"
+   "note": "replaced @adolf"
   }
  ]
 }
