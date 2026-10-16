@@ -1,0 +1,55 @@
+{
+ "updated": "2026-10-16T17:15:00Z",
+ "coins": {
+  "FL4eKdJrVZ1dVu1RoekeQRnuPxavzD4oCcR5HTcspump": {
+   "sym": "CINEMA",
+   "cost": 1.25,
+   "trader": "aiwass"
+  },
+  "ApZuxdpzMrbEYTGEzeY9afh5pj9d6qPRJCTgQYiipbKg": {
+   "sym": "CYBERLEEK",
+   "cost": 9.0,
+   "trader": "aiwass"
+  },
+  "Gyk9Z93Ri2JUjqES9HTpc7pxCJTLD7vhBhEjBhyApump": {
+   "sym": "Altai",
+   "cost": 6.0,
+   "trader": "aiwass"
+  },
+  "2Srf6mhufzWJKZ5nniVXgwamLmDJWXPQBmddJ1MMpump": {
+   "sym": "CyberAxe",
+   "cost": 6.28,
+   "trader": "aiwass"
+  },
+  "CC5D6puFmcsnGaJh7kNXeAcRpL2SZzQfoQezvx45uKjt": {
+   "sym": "WORLD",
+   "cost": 3.0,
+   "trader": "aiwass"
+  },
+  "3sHVVD6VQ15hzYp2pgURmF2V1FRBV4nm4fvK5SnEpump": {
+   "sym": "SWARMCHASERS",
+   "cost": 3.0,
+   "trader": "aiwass"
+  },
+  "0x14F6A94909C407854390Aa2d2462a3095D317777": {
+   "sym": "旺柴",
+   "cost": 11.33,
+   "trader": "Hifive_07"
+  },
+  "FCHoGT2WULVh2Pcn1934xtqv1UYEGtNGJxgGENZ9pump": {
+   "sym": "DREAM",
+   "cost": null,
+   "trader": null
+  },
+  "8uZieiVy2AanCpYkfxR1quKSbzPKuMUaNYwQ61mrT3iu": {
+   "sym": "REA",
+   "cost": null,
+   "trader": "aiwass"
+  },
+  "3nTmaNvUd12oEd52rsjc8hZLqSjRm1yoEtCnZBDRpump": {
+   "sym": "VERITY",
+   "cost": null,
+   "trader": null
+  }
+ }
+}

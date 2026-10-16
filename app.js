@@ -17,7 +17,10 @@ const WSOL = "So11111111111111111111111111111111111111112";
 const $ = id => document.getElementById(id);
 const fmt = n => "$" + n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const fmtAmt = n => n >= 1e6 ? (n / 1e6).toFixed(2) + "M" : n >= 1e3 ? (n / 1e3).toFixed(2) + "K" : n.toLocaleString("en-US", { maximumFractionDigits: 4 });
-let last = null, lastOk = 0;
+let last = null, lastOk = 0, COSTS = {}, ACT = null;
+const TCOL = ["#007aff","#ff9500","#af52de","#34c759","#ff2d55","#5ac8fa","#a2845e","#5856d6"];
+const tcol = t => { let h = 0; for (const ch of String(t)) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return TCOL[h % TCOL.length]; };
+const sgn = n => (n >= 0 ? "+" : "−") + fmt(Math.abs(n));
 $("dep").textContent = fmt(DEPOSITED_USD);
 
 async function j(url, opts) {
@@ -47,7 +50,7 @@ async function loadSolana() {
     const mint = k === "SOL" ? WSOL : k, p = px[mint.toLowerCase()] || {};
     const amt = v.uiAmount || 0;
     const price = mint === USDC_SOL ? 1 : p.price || 0;
-    return { chain: "Solana", sym: k === "SOL" ? "SOL" : p.sym || mint.slice(0, 4) + "…", amt, usd: amt * price, ch: mint === USDC_SOL ? 0 : p.ch, url: p.url || `https://dexscreener.com/solana/${mint}`, img: p.img, cash: mint === USDC_SOL };
+    return { chain: "Solana", sym: k === "SOL" ? "SOL" : p.sym || mint.slice(0, 4) + "…", amt, usd: amt * price, ch: mint === USDC_SOL ? 0 : p.ch, url: p.url || `https://dexscreener.com/solana/${mint}`, img: p.img, cash: mint === USDC_SOL, addr: mint };
   });
 }
 
@@ -64,7 +67,7 @@ async function loadEvm() {
     out.push({ chain: chain === "bsc" ? "BNB Chain" : "Base", sym: NATIVE[chain].sym, amt: n, usd: n * (np.price || 0), ch: np.ch, url: np.url, img: np.img });
     toks.forEach((t, i) => {
       const amt = Number(BigInt(raws[i * 2])) / 10 ** raws[i * 2 + 1], p = px[t.address.toLowerCase()] || {};
-      out.push({ chain: chain === "bsc" ? "BNB Chain" : "Base", sym: p.sym || t.address.slice(0, 6), amt, usd: amt * (p.price || 0), ch: p.ch, url: p.url || `https://dexscreener.com/${chain}/${t.address}`, img: p.img });
+      out.push({ chain: chain === "bsc" ? "BNB Chain" : "Base", sym: p.sym || t.address.slice(0, 6), amt, usd: amt * (p.price || 0), ch: p.ch, url: p.url || `https://dexscreener.com/${chain}/${t.address}`, img: p.img, addr: t.address });
     });
   }
   return out;
@@ -79,12 +82,16 @@ function render(items, errs) {
   $("cash").textContent = fmt(cash);
   const shown = items.filter(x => !x.cash && x.usd >= DUST_USD).sort((a, b) => b.usd - a.usd);
   $("tok").textContent = shown.length;
+  let open = 0, best = null;
+  shown.forEach(x => { const c = COSTS[(x.addr || "").toLowerCase()]; x.cb = c; if (c && c.cost != null) { x.gain = x.usd - c.cost; open += x.gain; if (!best || x.gain / c.cost > best.g) best = { s: x.sym, g: x.gain / c.cost }; } });
+  $("opnl").textContent = sgn(open); $("opnl").style.color = open >= 0 ? "#1a8f3c" : "#d70015";
+  $("best").textContent = best ? `${best.s} ${best.g >= 0 ? "+" : ""}${(best.g * 100).toFixed(0)}%` : "—";
   $("list").innerHTML = shown.length ? shown.map(x => {
     const c = x.ch == null ? `<span class="pill nu">—</span>` : `<span class="pill ${x.ch >= 0 ? "up" : "dn"}">${x.ch >= 0 ? "+" : ""}${(+x.ch).toFixed(2)}%</span>`;
     const esc = s => String(s).replace(/[&<>"]/g, m => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[m]));
     return `<a class="row" href="${esc(x.url || "#")}" target="_blank" rel="noopener">${x.img ? `<img src="${esc(x.img)}" alt="" loading="lazy">` : `<div class="ph"></div>`}
-      <div class="mid"><div class="sym">${esc(x.sym)}</div><div class="sub">${x.chain} · ${fmtAmt(x.amt)}</div></div>
-      <div class="r"><div class="val">${fmt(x.usd)}</div>${c}</div></a>`;
+      <div class="mid"><div class="sym">${esc(x.sym)}</div><div class="sub">${x.chain} · ${fmtAmt(x.amt)}</div>${x.cb?.trader ? `<div class="tg"><i style="background:${tcol(x.cb.trader)}"></i>@${esc(x.cb.trader)}</div>` : ""}</div>
+      <div class="r"><div class="val">${fmt(x.usd)}</div>${x.gain != null ? `<div class="cb ${x.gain >= 0 ? "g" : "d"}">Paid ${fmt(x.cb.cost)} · ${sgn(x.gain)} (${x.gain >= 0 ? "+" : ""}${(x.gain / x.cb.cost * 100).toFixed(0)}%)</div>` : `<div class="cb">cost —</div>`}${c}</div></a>`;
   }).join("") : `<div class="sub">No positions</div>`;
 }
 
@@ -114,8 +121,19 @@ async function loadTraders() {
   $("copyfoot").textContent = u && !isNaN(u) ? "Updated " + u.toLocaleString([], { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }) : "";
 }
 
+async function loadData() {
+  const esc = s => String(s ?? "").replace(/[&<>"]/g, m => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[m]));
+  try { const c = await j("costs.json"); COSTS = {}; for (const [k, v] of Object.entries(c.coins || {})) COSTS[k.toLowerCase()] = v; } catch (e) {}
+  try { ACT = await j("activity.json"); } catch (e) {}
+  if (ACT) $("actlist").innerHTML = ACT.slice().sort((a, b) => new Date(b.t) - new Date(a.t)).slice(0, 8).map((a, i) => {
+    const d = new Date(a.t);
+    return `<div class="ev${i ? "" : " first"}"><span>${esc(a.text)}</span><time>${isNaN(d) ? "" : d.toLocaleString([], { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" })}</time></div>`;
+  }).join("") || `<div class="sub">No activity</div>`;
+}
+function ago() { if (!lastOk) return; const s = Math.round((Date.now() - lastOk) / 1000); $("upd").textContent = (stale ? "Stale · " : "") + "Updated " + (s < 60 ? s + "s" : Math.floor(s / 60) + "m") + " ago"; }
+let stale = false;
 async function refresh() {
-  loadTraders();
+  loadTraders(); await loadData();
   $("ref").textContent = "↻ …";
   const res = await Promise.allSettled([loadSolana(), loadEvm()]);
   const errs = res.filter(r => r.status === "rejected").map(r => r.reason?.message || r.reason);
@@ -126,9 +144,9 @@ async function refresh() {
   $("warn").style.display = errs.length ? "block" : "none";
   $("warn").textContent = errs.length ? "⚠️ Some data failed to update — showing last good data. (" + errs.join("; ") + ")" : "";
   $("dot").className = "dot" + (errs.length ? " off" : "");
-  $("upd").textContent = (errs.length ? "Stale · " : "Live · ") + new Date(lastOk || Date.now()).toLocaleTimeString();
+  stale = !!errs.length; if (!lastOk) $("upd").textContent = "Offline"; ago();
   $("ref").textContent = "↻ Refresh";
 }
 $("ref").onclick = refresh;
-refresh(); setInterval(refresh, REFRESH_MS);
+refresh(); setInterval(refresh, REFRESH_MS); setInterval(ago, 1000);
 document.addEventListener("visibilitychange", () => { if (!document.hidden) refresh(); });

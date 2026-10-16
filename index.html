@@ -22,6 +22,7 @@ button{border:0;background:#fff;border-radius:20px;padding:8px 14px;font:inherit
 .row img,.ph{width:40px;height:40px;border-radius:50%;background:#eee;flex:none;object-fit:cover}
 .mid{flex:1;min-width:0}.sym{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.sub{font-size:13px;color:#6e6e73}
 .r{text-align:right}.val{font-weight:600}
+.r .pill{font-size:11px;padding:2px 7px;margin-top:3px}.cb{font-size:12px;color:#86868b;white-space:nowrap}.cb.g{color:#1a8f3c}.cb.d{color:#d70015}.tg{font-size:12px;color:#6e6e73;display:flex;align-items:center;gap:5px;margin-top:2px}.tg i{width:7px;height:7px;border-radius:50%;display:inline-block}.ev{display:flex;justify-content:space-between;gap:10px;font-size:14px;padding:9px 0;border-top:1px solid #f0f0f2}.ev.first{border-top:0}.ev time{font-size:12px;color:#86868b;white-space:nowrap;flex:none}.stats{flex-wrap:wrap;row-gap:10px}
 .warn{background:#fff4e5;color:#8a5300;border-radius:12px;padding:10px 14px;font-size:14px;margin-bottom:12px;display:none}
 .stats{display:flex;gap:24px;margin-top:10px}.stats div{font-size:13px;color:#6e6e73}.stats b{display:block;color:#1d1d1f;font-size:17px}
 .tr{display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid #f0f0f2}.tr.first{border-top:0}.tr.paused{opacity:.45}.hd{font-size:17px;font-weight:600;margin-bottom:4px}.foot{font-size:12px;color:#86868b;margin-top:8px}.tw{font-size:13px;color:#8a5300;background:#fff4e5;border-radius:10px;padding:8px 12px;margin-top:8px}
@@ -30,8 +31,9 @@ footer{font-size:12px;color:#86868b;text-align:center;margin:16px}
 <div class="top"><h1>FOMO</h1><div style="display:flex;gap:10px;align-items:center"><span class="live"><span class="dot" id="dot"></span><span id="upd">Loading…</span></span><button id="ref">↻ Refresh</button></div></div>
 <div class="warn" id="warn"></div>
 <div class="card"><div class="lbl">Total balance</div><div class="big" id="total">—</div><span class="pill nu" id="pnl">—</span>
-<div class="stats"><div>Deposited<b id="dep"></b></div><div>Cash (USDC)<b id="cash">—</b></div><div>Tokens<b id="tok">—</b></div></div></div>
+<div class="stats"><div>Deposited<b id="dep"></b></div><div>Cash (USDC)<b id="cash">—</b></div><div>Tokens<b id="tok">—</b></div><div>Open P&amp;L<b id="opnl">—</b></div><div>Best coin<b id="best">—</b></div></div></div>
 <div class="card" id="list"><div class="sub">Loading positions…</div></div>
+<div class="card"><div class="hd">Recent activity</div><div id="actlist"><div class="sub">Loading…</div></div></div>
 <div class="card" id="copy"><div class="hd" id="copyhd">Copying</div><div id="copylist"><div class="sub">Loading traders…</div></div><div class="foot" id="copyfoot"></div><div class="tw" id="copywarn" style="display:none"></div></div>
 <footer>Live on-chain data · Jupiter, PublicNode RPC, DexScreener · refreshes every 15s</footer>
 </main><script src="app.js"></script></body></html>
