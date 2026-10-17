@@ -6,34 +6,47 @@
 <meta name="apple-mobile-web-app-title" content="FOMO"><meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" content="#f5f5f7">
 <style>
-*{box-sizing:border-box}body{margin:0;background:#f5f5f7;font:16px -apple-system,BlinkMacSystemFont,"SF Pro Text",Helvetica,Arial,sans-serif;color:#1d1d1f;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
-main{max-width:560px;margin:0 auto;padding:16px}
-.top{display:flex;justify-content:space-between;align-items:center;margin:8px 4px 12px}
-h1{font-size:28px;margin:0;font-weight:700}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#eef2ff 0,#f5f5f7 220px);font:16px -apple-system,BlinkMacSystemFont,"SF Pro Text",Helvetica,Arial,sans-serif;color:#1d1d1f;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+main{max-width:580px;margin:0 auto;padding:16px}
+.top{display:flex;justify-content:space-between;align-items:center;margin:8px 4px 12px;gap:8px;flex-wrap:wrap}
+h1{font-size:30px;margin:0;font-weight:800;letter-spacing:-.5px}
 .live{font-size:13px;color:#6e6e73;display:flex;align-items:center;gap:6px}
 .dot{width:8px;height:8px;border-radius:50%;background:#34c759;animation:p 1.6s infinite}.dot.off{background:#ff9f0a;animation:none}
 @keyframes p{50%{opacity:.3}}
 button{border:0;background:#fff;border-radius:20px;padding:8px 14px;font:inherit;font-size:14px;color:#007aff;box-shadow:0 1px 3px #0001;cursor:pointer}
-.card{background:#fff;border-radius:18px;padding:18px;margin-bottom:12px;box-shadow:0 1px 3px #0000000d}
-.lbl{font-size:13px;color:#6e6e73}.big{font-size:44px;font-weight:700;letter-spacing:-1px;margin:4px 0 8px}
-.pill{display:inline-block;padding:3px 10px;border-radius:12px;font-size:14px;font-weight:600}
+.card{background:#fff;border-radius:20px;padding:18px;margin-bottom:12px;box-shadow:0 2px 10px #0000000a}
+.hero{background:linear-gradient(135deg,#111827,#312e81 60%,#7c3aed);color:#fff}.hero .lbl{color:#c7d2fe}.hero .big{color:#fff}
+.lbl{font-size:13px;color:#6e6e73;text-transform:uppercase;letter-spacing:.6px;font-weight:600}.big{font-size:52px;font-weight:800;letter-spacing:-1.5px;margin:6px 0 8px;line-height:1}
+.pill{display:inline-block;padding:4px 11px;border-radius:12px;font-size:14px;font-weight:700}
+.hero .pill{font-size:15px;padding:5px 13px}
 .up{background:#e3f9e9;color:#1a8f3c}.dn{background:#ffe5e3;color:#d70015}.nu{background:#eee;color:#666}
+.hero .up{background:#dcfce7}.hero .dn{background:#fee2e2}
+.netline{margin-top:12px;font-size:16px;font-weight:600;color:#e0e7ff;line-height:1.45}
+.note{margin-top:6px;font-size:13px;color:#a5b4fc;line-height:1.45}
 .row{display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid #f0f0f2;text-decoration:none;color:inherit}.row:first-child{border-top:0}
-.row img,.ph{width:40px;height:40px;border-radius:50%;background:#eee;flex:none;object-fit:cover}
-.mid{flex:1;min-width:0}.sym{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.sub{font-size:13px;color:#6e6e73}
-.r{text-align:right}.val{font-weight:600}
-.r .pill{font-size:11px;padding:2px 7px;margin-top:3px}.cb{font-size:12px;color:#86868b;white-space:nowrap}.cb.g{color:#1a8f3c}.cb.d{color:#d70015}.tg{font-size:12px;color:#6e6e73;display:flex;align-items:center;gap:5px;margin-top:2px}.tg i{width:7px;height:7px;border-radius:50%;display:inline-block}.ev{display:flex;justify-content:space-between;gap:10px;font-size:14px;padding:9px 0;border-top:1px solid #f0f0f2}.ev.first{border-top:0}.ev time{font-size:12px;color:#86868b;white-space:nowrap;flex:none}.stats{flex-wrap:wrap;row-gap:10px}
+.row img,.ph{width:42px;height:42px;border-radius:50%;background:#eee;flex:none;object-fit:cover}
+.mid{flex:1;min-width:0}.sym{font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.sub{font-size:13px;color:#6e6e73}
+.r{text-align:right}.val{font-weight:700;font-size:17px}
+.r .pill{font-size:11px;padding:2px 7px;margin-top:3px}.cb{font-size:12px;color:#86868b;white-space:nowrap}.cb.g{color:#1a8f3c}.cb.d{color:#d70015}.tg{font-size:12px;color:#6e6e73;display:flex;align-items:center;gap:5px;margin-top:2px}.tg i,.tdot{width:8px;height:8px;border-radius:50%;display:inline-block;flex:none}.ev{display:flex;justify-content:space-between;gap:10px;font-size:14px;padding:9px 0;border-top:1px solid #f0f0f2}.ev.first{border-top:0}.ev time{font-size:12px;color:#86868b;white-space:nowrap;flex:none}
 .warn{background:#fff4e5;color:#8a5300;border-radius:12px;padding:10px 14px;font-size:14px;margin-bottom:12px;display:none}
-.stats{display:flex;gap:24px;margin-top:10px}.stats div{font-size:13px;color:#6e6e73}.stats b{display:block;color:#1d1d1f;font-size:17px}
-.tr{display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid #f0f0f2}.tr.first{border-top:0}.tr.paused{opacity:.45}.hd{font-size:17px;font-weight:600;margin-bottom:4px}.foot{font-size:12px;color:#86868b;margin-top:8px}.tw{font-size:13px;color:#8a5300;background:#fff4e5;border-radius:10px;padding:8px 12px;margin-top:8px}
-footer{font-size:12px;color:#86868b;text-align:center;margin:16px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.stats>div{background:#f5f5f7;border-radius:14px;padding:10px 11px;font-size:12px;color:#6e6e73;min-width:0}
+.hero .stats>div{background:#ffffff1f;color:#c7d2fe}
+.stats b{display:block;color:#1d1d1f;font-size:18px;margin-top:3px;white-space:nowrap}
+.hero .stats b{color:#fff}
+@media(max-width:420px){.stats{grid-template-columns:repeat(2,1fr)}.big{font-size:46px}}
+.tr{display:flex;align-items:center;gap:10px;padding:12px 0;border-top:1px solid #f0f0f2}.tr.first{border-top:0}.tr.paused{opacity:.45}.hd{font-size:18px;font-weight:700;margin-bottom:4px}.foot{font-size:12px;color:#86868b;margin-top:8px;line-height:1.5}.tw{font-size:13px;color:#8a5300;background:#fff4e5;border-radius:10px;padding:8px 12px;margin-top:8px}
+footer{font-size:12px;color:#86868b;text-align:center;margin:16px;line-height:1.6}
 </style></head><body><main>
 <div class="top"><h1>FOMO</h1><div style="display:flex;gap:10px;align-items:center"><span class="live"><span class="dot" id="dot"></span><span id="upd">Loading…</span></span><button id="ref">↻ Refresh</button></div></div>
 <div class="warn" id="warn"></div>
-<div class="card"><div class="lbl">Total balance</div><div class="big" id="total">—</div><span class="pill nu" id="pnl">—</span>
-<div class="stats"><div>Deposited<b id="dep"></b></div><div>Cash (USDC)<b id="cash">—</b></div><div>Tokens<b id="tok">—</b></div><div>Open P&amp;L<b id="opnl">—</b></div><div>Best coin<b id="best">—</b></div></div></div>
-<div class="card" id="list"><div class="sub">Loading positions…</div></div>
+<div class="card hero"><div class="lbl">Total balance</div><div class="big" id="total">—</div><span class="pill nu" id="pnl">—</span>
+<div class="netline" id="netline">Portfolio − deposited = —</div>
+<div class="note">Deposited is your total cash in — portfolio above or below it is your net P&amp;L.</div>
+<div class="stats"><div>Deposited total<b id="dep"></b></div><div>P&amp;L vs deposited<b id="netval">—</b></div><div>Cash (USDC)<b id="cash">—</b></div><div>Open P&amp;L<b id="opnl">—</b></div><div>Realized P&amp;L<b id="rpnl">—</b></div><div>Tokens<b id="tok">—</b></div><div>Best coin<b id="best">—</b></div></div>
+<div class="note">Realized = $CyberAxe closed via @aiwass (tile above). Cash is live USDC (was $0.88 at last check).</div></div>
+<div class="card"><div class="hd">Holdings</div><div id="list"><div class="sub">Loading positions…</div></div><div class="foot">$VLAD (Robinhood chain, $3.09 via @aiwass) can’t be auto-tracked here — BSC/Base/Solana only, so it isn’t in the live total above.</div></div>
 <div class="card"><div class="hd">Recent activity</div><div id="actlist"><div class="sub">Loading…</div></div></div>
 <div class="card" id="copy"><div class="hd" id="copyhd">Copying</div><div id="copylist"><div class="sub">Loading traders…</div></div><div class="foot" id="copyfoot"></div><div class="tw" id="copywarn" style="display:none"></div></div>
 <footer>Live on-chain data · Jupiter, PublicNode RPC, DexScreener · refreshes every 15s</footer>
-</main><script src="app.js?v=b03c1a7"></script></body></html>
+</main><script src="app.js?v20261017-11cb0d"></script></body></html>

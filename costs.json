@@ -38,18 +38,18 @@
   },
   "FCHoGT2WULVh2Pcn1934xtqv1UYEGtNGJxgGENZ9pump": {
    "sym": "DREAM",
-   "cost": null,
-   "trader": null
+   "cost": 3.0,
+   "trader": "aiwass"
   },
   "8uZieiVy2AanCpYkfxR1quKSbzPKuMUaNYwQ61mrT3iu": {
    "sym": "REA",
-   "cost": null,
+   "cost": 3.0,
    "trader": "aiwass"
   },
   "3nTmaNvUd12oEd52rsjc8hZLqSjRm1yoEtCnZBDRpump": {
    "sym": "VERITY",
-   "cost": null,
-   "trader": null
+   "cost": 3.0,
+   "trader": "aiwass"
   }
  }
 }

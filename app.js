@@ -1,5 +1,7 @@
 // ===== Config (edit me) =====
-const DEPOSITED_USD = 39.82;
+const DEPOSITED_USD = 57.52; // Total deposited (single source; +$17.70 credited Oct 16 ~14:02 UTC from $17.81 SOL deposit)
+const REALIZED_PNL_USD = 5.31; // Realized: $CyberAxe closed via @aiwass (+195%)
+// Note: $VLAD (Robinhood chain, $3.09 via @aiwass) is not auto-tracked — EVM_TOKENS only covers BSC/Base, so don't invent tracking for it.
 const SOL_WALLET = "7BQKwDkic5gjQmFRJwiAr7P4KrYzAmBHUEaCv7yXb4sP";
 const EVM_WALLET = "0x789d01bc529eE2346A4F6abF78a6D37F1B3B770B";
 const REFRESH_MS = 15000;
@@ -22,6 +24,7 @@ const TCOL = ["#007aff","#ff9500","#af52de","#34c759","#ff2d55","#5ac8fa","#a284
 const tcol = t => { let h = 0; for (const ch of String(t)) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return TCOL[h % TCOL.length]; };
 const sgn = n => (n >= 0 ? "+" : "−") + fmt(Math.abs(n));
 $("dep").textContent = fmt(DEPOSITED_USD);
+if ($("rpnl")) { $("rpnl").textContent = sgn(REALIZED_PNL_USD); $("rpnl").style.color = REALIZED_PNL_USD >= 0 ? "#86efac" : "#fca5a5"; }
 
 async function j(url, opts) {
   const r = await fetch(url, { cache: "no-store", ...opts });
@@ -80,11 +83,13 @@ function render(items, errs) {
   $("pnl").className = "pill " + (pnl >= 0 ? "up" : "dn");
   $("pnl").textContent = `${pnl >= 0 ? "+" : "−"}${fmt(Math.abs(pnl))} (${pnl >= 0 ? "+" : ""}${pct.toFixed(2)}%) all time`;
   $("cash").textContent = fmt(cash);
+  if ($("netline")) $("netline").textContent = `${fmt(total)} portfolio \u2212 ${fmt(DEPOSITED_USD)} deposited = ${sgn(pnl)} (${pnl >= 0 ? "+" : ""}${pct.toFixed(2)}%)`;
+  if ($("netval")) { $("netval").textContent = sgn(pnl); $("netval").style.color = pnl >= 0 ? "#86efac" : "#fca5a5"; }
   const shown = items.filter(x => !x.cash && x.usd >= DUST_USD).sort((a, b) => b.usd - a.usd);
   $("tok").textContent = shown.length;
   let open = 0, best = null;
   shown.forEach(x => { const c = COSTS[(x.addr || "").toLowerCase()]; x.cb = c; if (c && c.cost != null) { x.gain = x.usd - c.cost; open += x.gain; if (!best || x.gain / c.cost > best.g) best = { s: x.sym, g: x.gain / c.cost }; } });
-  $("opnl").textContent = sgn(open); $("opnl").style.color = open >= 0 ? "#1a8f3c" : "#d70015";
+  $("opnl").textContent = sgn(open); $("opnl").style.color = open >= 0 ? "#86efac" : "#fca5a5";
   $("best").textContent = best ? `${best.s} ${best.g >= 0 ? "+" : ""}${(best.g * 100).toFixed(0)}%` : "—";
   $("list").innerHTML = shown.length ? shown.map(x => {
     const c = x.ch == null ? `<span class="pill nu">—</span>` : `<span class="pill ${x.ch >= 0 ? "up" : "dn"}">${x.ch >= 0 ? "+" : ""}${(+x.ch).toFixed(2)}%</span>`;
@@ -113,7 +118,7 @@ async function loadTraders() {
   $("copyhd").textContent = `Copying · ${live} live`;
   $("copylist").innerHTML = ts.length ? ts.map((t, i) => {
     const on = t.status === "live";
-    return `<div class="tr${i ? "" : " first"}${on ? "" : " paused"}"><div class="mid"><div class="sym">@${esc(t.handle)}</div>
+    return `<div class="tr${i ? "" : " first"}${on ? "" : " paused"}"><span class="tdot" style="background:${tcol(t.handle)}"></span><div class="mid"><div class="sym">@${esc(t.handle)}</div>
       <div class="sub">${esc([t.size, t.chains].filter(Boolean).join(" · "))}${t.note ? " · " + esc(t.note) : ""}</div></div>
       <span class="pill ${on ? "up" : "nu"}">${on ? "Live" : "Paused"}</span></div>`;
   }).join("") : `<div class="sub">No traders</div>`;
@@ -130,7 +135,7 @@ async function loadData() {
     return `<div class="ev${i ? "" : " first"}"><span>${esc(a.text)}</span><time>${isNaN(d) ? "" : d.toLocaleString([], { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" })}</time></div>`;
   }).join("") || `<div class="sub">No activity</div>`;
 }
-function ago() { if (!lastOk) return; const s = Math.round((Date.now() - lastOk) / 1000); $("upd").textContent = (stale ? "Stale · " : "") + "Updated " + (s < 60 ? s + "s" : Math.floor(s / 60) + "m") + " ago"; }
+function ago() { if (!lastOk) return; const s = Math.round((Date.now() - lastOk) / 1000); const t = s < 5 ? "just now" : s < 60 ? s + "s ago" : s < 3600 ? Math.floor(s / 60) + "m ago" : Math.floor(s / 3600) + "h ago"; $("upd").textContent = (stale ? "Stale · " : "") + "Updated " + t; }
 let stale = false;
 async function refresh() {
   loadTraders(); await loadData();
