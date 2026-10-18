@@ -20,6 +20,18 @@ const USDC_SOL = "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v";
 const WSOL = "So11111111111111111111111111111111111111112";
 // ============================
 
+const APP_VERSION = "20261018-1344-7had"; // Keep in sync with version.json + index.html ?v=
+async function checkUpdate() {
+  try {
+    const r = await fetch(`version.json?t=${Date.now()}`, { cache: "no-store" });
+    if (!r.ok) return;
+    const remote = (await r.json()).version;
+    if (remote && remote !== APP_VERSION && sessionStorage.getItem("fomo-updated-to") !== remote) {
+      sessionStorage.setItem("fomo-updated-to", remote);
+      location.replace(location.pathname + "?u=" + encodeURIComponent(remote)); // query-busts HTML fetch; same path/icon, no re-add
+    }
+  } catch (e) {}
+}
 const $ = id => document.getElementById(id);
 const fmt = n => "$" + n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const fmtAmt = n => n >= 1e6 ? (n / 1e6).toFixed(2) + "M" : n >= 1e3 ? (n / 1e3).toFixed(2) + "K" : n.toLocaleString("en-US", { maximumFractionDigits: 4 });
@@ -163,4 +175,5 @@ async function refresh() {
 }
 $("ref").onclick = refresh;
 refresh(); setInterval(refresh, REFRESH_MS); setInterval(ago, 1000);
-document.addEventListener("visibilitychange", () => { if (!document.hidden) refresh(); });
+document.addEventListener("visibilitychange", () => { if (!document.hidden) { checkUpdate(); refresh(); } });
+checkUpdate();
