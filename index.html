@@ -34,6 +34,7 @@ button{border:0;background:#fff;border-radius:20px;padding:8px 14px;font:inherit
 .hero .stats>div{background:#ffffff1f;color:#c7d2fe}
 .stats b{display:block;color:#1d1d1f;font-size:18px;margin-top:3px;white-space:nowrap}
 .hero .stats b{color:#fff}
+.cashready{display:block;font-size:12px;font-weight:700;margin-top:4px;line-height:1.35}.cashready.ready{color:#86efac}.cashready.low{color:#fca5a5}.cashhint{display:block;font-size:11px;font-weight:500;margin-top:2px;line-height:1.35;color:#fcd34d}.hero .stats .cashhint{color:#fcd34d}
 @media(max-width:420px){.stats{grid-template-columns:repeat(2,1fr)}.big{font-size:46px}}
 .tr{display:flex;align-items:center;gap:10px;padding:12px 0;border-top:1px solid #f0f0f2}.tr.first{border-top:0}.tr.paused{opacity:.45}.hd{font-size:18px;font-weight:700;margin-bottom:4px}.foot{font-size:12px;color:#86868b;margin-top:8px;line-height:1.5}.tw{font-size:13px;color:#8a5300;background:#fff4e5;border-radius:10px;padding:8px 12px;margin-top:8px}
 footer{font-size:12px;color:#86868b;text-align:center;margin:16px;line-height:1.6}
@@ -43,10 +44,10 @@ footer{font-size:12px;color:#86868b;text-align:center;margin:16px;line-height:1.
 <div class="card hero"><div class="lbl">Total balance</div><div class="big" id="total">—</div><span class="pill nu" id="pnl">—</span>
 <div class="netline" id="netline">Portfolio − deposited = —</div>
 <div class="note">Deposited is your total cash in — portfolio above or below it is your net P&amp;L.</div>
-<div class="stats"><div>Deposited total<b id="dep"></b></div><div>P&amp;L vs deposited<b id="netval">—</b></div><div>Cash (USDC)<b id="cash">—</b></div><div>Open P&amp;L<b id="opnl">—</b></div><div>Realized P&amp;L<b id="rpnl">—</b></div><div>Tokens<b id="tok">—</b></div><div>Best coin<b id="best">—</b></div></div>
-<div class="note">Realized = $CyberAxe closed via @aiwass (tile above). Cash is live USDC (was $0.88 at last check).</div></div>
+<div class="stats"><div>Deposited total<b id="dep"></b></div><div>P&amp;L vs deposited<b id="netval">—</b></div><div>Cash (USDC)<b id="cash">—</b><span class="cashready low" id="cashready">Checking cash…</span><span class="cashhint" id="cashhint">Needs $3.35 ($3 cap + $0.35 buffer) · Ideal $7–$10</span></div><div>Open P&amp;L<b id="opnl">—</b></div><div>Realized P&amp;L<b id="rpnl">—</b></div><div>Tokens<b id="tok">—</b></div><div>Best coin<b id="best">—</b></div></div>
+<div class="note">Realized = $CyberAxe closed via @aiwass (tile above). Cash is live USDC (was $0.88 at last check). Cash-ready needs $3.35 for one trade ($3 cap + $0.35 buffer); ideal $7–$10.</div></div>
 <div class="card"><div class="hd">Holdings</div><div id="list"><div class="sub">Loading positions…</div></div><div class="foot">$VLAD (Robinhood chain, $3.09 via @aiwass) can’t be auto-tracked here — BSC/Base/Solana only, so it isn’t in the live total above.</div></div>
 <div class="card"><div class="hd">Recent activity</div><div id="actlist"><div class="sub">Loading…</div></div></div>
 <div class="card" id="copy"><div class="hd" id="copyhd">Copying</div><div id="copylist"><div class="sub">Loading traders…</div></div><div class="foot" id="copyfoot"></div><div class="tw" id="copywarn" style="display:none"></div></div>
 <footer>Live on-chain data · Jupiter, PublicNode RPC, DexScreener · refreshes every 15s</footer>
-</main><script src="app.js?v20261017-11cb0d"></script></body></html>
+</main><script src="app.js?v20261018-cashready"></script></body></html>

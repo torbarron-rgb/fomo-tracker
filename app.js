@@ -4,6 +4,10 @@ const REALIZED_PNL_USD = 5.31; // Realized: $CyberAxe closed via @aiwass (+195%)
 // Note: $VLAD (Robinhood chain, $3.09 via @aiwass) is not auto-tracked — EVM_TOKENS only covers BSC/Base, so don't invent tracking for it.
 const SOL_WALLET = "7BQKwDkic5gjQmFRJwiAr7P4KrYzAmBHUEaCv7yXb4sP";
 const EVM_WALLET = "0x789d01bc529eE2346A4F6abF78a6D37F1B3B770B";
+const MAX_CAP_USD = 3; // Cap per trade (single source for cash-ready check)
+const TRADE_FEE_BUFFER_USD = 0.35; // Fee/slippage buffer on top of cap
+const CASH_NEED_USD = MAX_CAP_USD + TRADE_FEE_BUFFER_USD; // $3.35 needed for one trade
+const IDEAL_CASH_MIN_USD = 7, IDEAL_CASH_MAX_USD = 10; // Ideal cash buffer hint
 const REFRESH_MS = 15000;
 const DUST_USD = 0.01;
 // EVM tokens can't be auto-discovered keylessly; list contracts to check here (chain: "bsc" | "base").
@@ -83,6 +87,14 @@ function render(items, errs) {
   $("pnl").className = "pill " + (pnl >= 0 ? "up" : "dn");
   $("pnl").textContent = `${pnl >= 0 ? "+" : "−"}${fmt(Math.abs(pnl))} (${pnl >= 0 ? "+" : ""}${pct.toFixed(2)}%) all time`;
   $("cash").textContent = fmt(cash);
+  if ($("cashready")) {
+    const need = CASH_NEED_USD, short = need - cash, ready = cash >= need;
+    $("cashready").textContent = ready ? "\u2713 Ready for next trade" : `Need ${fmt(short)} more for next trade`;
+    $("cashready").className = "cashready " + (ready ? "ready" : "low");
+    if ($("cashhint")) $("cashhint").textContent = ready
+      ? (cash < IDEAL_CASH_MIN_USD ? `Ideal ${fmt(IDEAL_CASH_MIN_USD)}\u2013${fmt(IDEAL_CASH_MAX_USD)} for buffer` : "")
+      : `Needs ${fmt(need)} (${fmt(MAX_CAP_USD)} cap + ${fmt(TRADE_FEE_BUFFER_USD)} buffer) \u00b7 Ideal ${fmt(IDEAL_CASH_MIN_USD)}\u2013${fmt(IDEAL_CASH_MAX_USD)}`;
+  }
   if ($("netline")) $("netline").textContent = `${fmt(total)} portfolio \u2212 ${fmt(DEPOSITED_USD)} deposited = ${sgn(pnl)} (${pnl >= 0 ? "+" : ""}${pct.toFixed(2)}%)`;
   if ($("netval")) { $("netval").textContent = sgn(pnl); $("netval").style.color = pnl >= 0 ? "#86efac" : "#fca5a5"; }
   const shown = items.filter(x => !x.cash && x.usd >= DUST_USD).sort((a, b) => b.usd - a.usd);
