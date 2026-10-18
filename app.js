@@ -1,5 +1,5 @@
 // ===== Config (edit me) =====
-const DEPOSITED_USD = 57.52; // Total deposited (single source; +$17.70 credited Oct 16 ~14:02 UTC from $17.81 SOL deposit)
+const DEPOSITED_USD = 67.13; // Total deposited: $57.52 + $9.61 detected Oct 18 ~13:36 UTC (USDC $0.88 -> $10.491276 on-chain via Jupiter, SOL 0, no holdings sold)
 const REALIZED_PNL_USD = 5.31; // Realized: $CyberAxe closed via @aiwass (+195%)
 // Note: $VLAD (Robinhood chain, $3.09 via @aiwass) is not auto-tracked — EVM_TOKENS only covers BSC/Base, so don't invent tracking for it.
 const SOL_WALLET = "7BQKwDkic5gjQmFRJwiAr7P4KrYzAmBHUEaCv7yXb4sP";
@@ -98,7 +98,7 @@ function render(items, errs) {
   if ($("netline")) $("netline").textContent = `${fmt(total)} portfolio \u2212 ${fmt(DEPOSITED_USD)} deposited = ${sgn(pnl)} (${pnl >= 0 ? "+" : ""}${pct.toFixed(2)}%)`;
   if ($("netval")) { $("netval").textContent = sgn(pnl); $("netval").style.color = pnl >= 0 ? "#86efac" : "#fca5a5"; }
   const shown = items.filter(x => !x.cash && x.usd >= DUST_USD).sort((a, b) => b.usd - a.usd);
-  $("tok").textContent = shown.length;
+  if ($("tok")) $("tok").textContent = shown.length;
   let open = 0, best = null;
   shown.forEach(x => { const c = COSTS[(x.addr || "").toLowerCase()]; x.cb = c; if (c && c.cost != null) { x.gain = x.usd - c.cost; open += x.gain; if (!best || x.gain / c.cost > best.g) best = { s: x.sym, g: x.gain / c.cost }; } });
   $("opnl").textContent = sgn(open); $("opnl").style.color = open >= 0 ? "#86efac" : "#fca5a5";
@@ -116,7 +116,7 @@ let lastTraders = null;
 async function loadTraders() {
   const esc = s => String(s ?? "").replace(/[&<>"]/g, m => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[m]));
   try {
-    const r = await fetch("traders.json", { cache: "no-store" });
+    const r = await fetch(`traders.json?t=${Date.now()}`, { cache: "no-store" });
     if (!r.ok) throw new Error("HTTP " + r.status);
     lastTraders = await r.json();
     $("copywarn").style.display = "none";
@@ -140,8 +140,8 @@ async function loadTraders() {
 
 async function loadData() {
   const esc = s => String(s ?? "").replace(/[&<>"]/g, m => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[m]));
-  try { const c = await j("costs.json"); COSTS = {}; for (const [k, v] of Object.entries(c.coins || {})) COSTS[k.toLowerCase()] = v; } catch (e) {}
-  try { ACT = await j("activity.json"); } catch (e) {}
+  try { const c = await j(`costs.json?t=${Date.now()}`); COSTS = {}; for (const [k, v] of Object.entries(c.coins || {})) COSTS[k.toLowerCase()] = v; } catch (e) {}
+  try { ACT = await j(`activity.json?t=${Date.now()}`); } catch (e) {}
   if (ACT) $("actlist").innerHTML = ACT.slice().sort((a, b) => new Date(b.t) - new Date(a.t)).slice(0, 8).map((a, i) => {
     const d = new Date(a.t);
     return `<div class="ev${i ? "" : " first"}"><span>${esc(a.text)}</span><time>${isNaN(d) ? "" : d.toLocaleString([], { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" })}</time></div>`;
