@@ -28,7 +28,7 @@ const TCOL = ["#007aff","#ff9500","#af52de","#34c759","#ff2d55","#5ac8fa","#a284
 const tcol = t => { let h = 0; for (const ch of String(t)) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return TCOL[h % TCOL.length]; };
 const sgn = n => (n >= 0 ? "+" : "−") + fmt(Math.abs(n));
 $("dep").textContent = fmt(DEPOSITED_USD);
-if ($("rpnl")) { $("rpnl").textContent = sgn(REALIZED_PNL_USD); $("rpnl").style.color = REALIZED_PNL_USD >= 0 ? "#86efac" : "#fca5a5"; }
+if ($("rpnl")) { $("rpnl").textContent = sgn(REALIZED_PNL_USD); $("rpnl").style.color = REALIZED_PNL_USD >= 0 ? "#16a34a" : "#dc2626"; }
 
 async function j(url, opts) {
   const r = await fetch(url, { cache: "no-store", ...opts });
@@ -84,31 +84,28 @@ function render(items, errs) {
   const total = items.reduce((s, x) => s + x.usd, 0), cash = items.filter(x => x.cash).reduce((s, x) => s + x.usd, 0);
   const pnl = total - DEPOSITED_USD, pct = pnl / DEPOSITED_USD * 100;
   $("total").textContent = fmt(total);
-  $("pnl").className = "pill " + (pnl >= 0 ? "up" : "dn");
-  $("pnl").textContent = `${pnl >= 0 ? "+" : "−"}${fmt(Math.abs(pnl))} (${pnl >= 0 ? "+" : ""}${pct.toFixed(2)}%) all time`;
   $("cash").textContent = fmt(cash);
   if ($("cashready")) {
     const need = CASH_NEED_USD, short = need - cash, ready = cash >= need;
     $("cashready").textContent = ready ? "\u2713 Ready for next trade" : `Need ${fmt(short)} more for next trade`;
-    $("cashready").className = "cashready " + (ready ? "ready" : "low");
+    $("cashready").className = "tsub " + (ready ? "ready" : "low");
     if ($("cashhint")) $("cashhint").textContent = ready
       ? (cash < IDEAL_CASH_MIN_USD ? `Ideal ${fmt(IDEAL_CASH_MIN_USD)}\u2013${fmt(IDEAL_CASH_MAX_USD)} for buffer` : "")
       : `Needs ${fmt(need)} (${fmt(MAX_CAP_USD)} cap + ${fmt(TRADE_FEE_BUFFER_USD)} buffer) \u00b7 Ideal ${fmt(IDEAL_CASH_MIN_USD)}\u2013${fmt(IDEAL_CASH_MAX_USD)}`;
   }
-  if ($("netline")) $("netline").textContent = `${fmt(total)} portfolio \u2212 ${fmt(DEPOSITED_USD)} deposited = ${sgn(pnl)} (${pnl >= 0 ? "+" : ""}${pct.toFixed(2)}%)`;
-  if ($("netval")) { $("netval").textContent = sgn(pnl); $("netval").style.color = pnl >= 0 ? "#86efac" : "#fca5a5"; }
+  if ($("netline")) $("netline").innerHTML = `<span class="${pnl >= 0 ? "up" : "dn"}">${sgn(pnl)} (${pnl >= 0 ? "+" : ""}${pct.toFixed(2)}%)</span> <span class="dim">vs ${fmt(DEPOSITED_USD)} deposited</span>`;
+  if ($("netval")) { $("netval").textContent = sgn(pnl); $("netval").style.color = pnl >= 0 ? "#16a34a" : "#dc2626"; }
   const shown = items.filter(x => !x.cash && x.usd >= DUST_USD).sort((a, b) => b.usd - a.usd);
   if ($("tok")) $("tok").textContent = shown.length;
   let open = 0, best = null;
   shown.forEach(x => { const c = COSTS[(x.addr || "").toLowerCase()]; x.cb = c; if (c && c.cost != null) { x.gain = x.usd - c.cost; open += x.gain; if (!best || x.gain / c.cost > best.g) best = { s: x.sym, g: x.gain / c.cost }; } });
-  $("opnl").textContent = sgn(open); $("opnl").style.color = open >= 0 ? "#86efac" : "#fca5a5";
+  $("opnl").textContent = sgn(open); $("opnl").style.color = open >= 0 ? "#16a34a" : "#dc2626";
   $("best").textContent = best ? `${best.s} ${best.g >= 0 ? "+" : ""}${(best.g * 100).toFixed(0)}%` : "—";
   $("list").innerHTML = shown.length ? shown.map(x => {
-    const c = x.ch == null ? `<span class="pill nu">—</span>` : `<span class="pill ${x.ch >= 0 ? "up" : "dn"}">${x.ch >= 0 ? "+" : ""}${(+x.ch).toFixed(2)}%</span>`;
     const esc = s => String(s).replace(/[&<>"]/g, m => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[m]));
     return `<a class="row" href="${esc(x.url || "#")}" target="_blank" rel="noopener">${x.img ? `<img src="${esc(x.img)}" alt="" loading="lazy">` : `<div class="ph"></div>`}
       <div class="mid"><div class="sym">${esc(x.sym)}</div><div class="sub">${x.chain} · ${fmtAmt(x.amt)}</div>${x.cb?.trader ? `<div class="tg"><i style="background:${tcol(x.cb.trader)}"></i>@${esc(x.cb.trader)}</div>` : ""}</div>
-      <div class="r"><div class="val">${fmt(x.usd)}</div>${x.gain != null ? `<div class="cb ${x.gain >= 0 ? "g" : "d"}">Paid ${fmt(x.cb.cost)} · ${sgn(x.gain)} (${x.gain >= 0 ? "+" : ""}${(x.gain / x.cb.cost * 100).toFixed(0)}%)</div>` : `<div class="cb">cost —</div>`}${c}</div></a>`;
+      <div class="r"><div class="val">${fmt(x.usd)}</div>${x.gain != null ? `<div class="cb">Paid ${fmt(x.cb.cost)}</div><div class="cb ${x.gain >= 0 ? "g" : "d"}">${sgn(x.gain)} (${x.gain >= 0 ? "+" : ""}${(x.gain / x.cb.cost * 100).toFixed(0)}%)</div>` : `<div class="cb">Paid —</div>`}</div></a>`;
   }).join("") : `<div class="sub">No positions</div>`;
 }
 
@@ -127,12 +124,12 @@ async function loadTraders() {
   }
   const ts = (lastTraders.traders || []).slice().sort((a, b) => (a.status === "live" ? 0 : 1) - (b.status === "live" ? 0 : 1));
   const live = ts.filter(t => t.status === "live").length;
-  $("copyhd").textContent = `Copying · ${live} live`;
+  const sizeLabel = (ts[0] && ts[0].size) ? ts[0].size.replace(" of buy", "") : ""; $("copyhd").textContent = `${live} live` + (sizeLabel ? ` · ${sizeLabel}` : "");
   $("copylist").innerHTML = ts.length ? ts.map((t, i) => {
     const on = t.status === "live";
     return `<div class="tr${i ? "" : " first"}${on ? "" : " paused"}"><span class="tdot" style="background:${tcol(t.handle)}"></span><div class="mid"><div class="sym">@${esc(t.handle)}</div>
-      <div class="sub">${esc([t.size, t.chains].filter(Boolean).join(" · "))}${t.note ? " · " + esc(t.note) : ""}</div></div>
-      <span class="pill ${on ? "up" : "nu"}">${on ? "Live" : "Paused"}</span></div>`;
+      <div class="sub">${esc(t.chains || "")}${t.note ? " · " + esc(t.note) : ""}</div></div>
+      <span class="status ${on ? "live" : "paused"}">${on ? "Live" : "Paused"}</span></div>`;
   }).join("") : `<div class="sub">No traders</div>`;
   const u = lastTraders.updated ? new Date(lastTraders.updated) : null;
   $("copyfoot").textContent = u && !isNaN(u) ? "Updated " + u.toLocaleString([], { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }) : "";
@@ -142,7 +139,7 @@ async function loadData() {
   const esc = s => String(s ?? "").replace(/[&<>"]/g, m => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[m]));
   try { const c = await j(`costs.json?t=${Date.now()}`); COSTS = {}; for (const [k, v] of Object.entries(c.coins || {})) COSTS[k.toLowerCase()] = v; } catch (e) {}
   try { ACT = await j(`activity.json?t=${Date.now()}`); } catch (e) {}
-  if (ACT) $("actlist").innerHTML = ACT.slice().sort((a, b) => new Date(b.t) - new Date(a.t)).slice(0, 8).map((a, i) => {
+  if (ACT) $("actlist").innerHTML = ACT.slice().sort((a, b) => new Date(b.t) - new Date(a.t)).slice(0, 6).map((a, i) => {
     const d = new Date(a.t);
     return `<div class="ev${i ? "" : " first"}"><span>${esc(a.text)}</span><time>${isNaN(d) ? "" : d.toLocaleString([], { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" })}</time></div>`;
   }).join("") || `<div class="sub">No activity</div>`;

@@ -6,59 +6,73 @@
 <meta name="apple-mobile-web-app-title" content="FOMO"><meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" content="#f5f5f7">
 <style>
-*{box-sizing:border-box}body{margin:0;background:#f5f5f7;font:17px -apple-system,BlinkMacSystemFont,"SF Pro Text",Helvetica,Arial,sans-serif;color:#1d1d1f;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
-main{max-width:600px;margin:0 auto;padding:18px 16px 28px}
-.top{display:flex;justify-content:space-between;align-items:center;margin:6px 2px 14px;gap:8px}
-h1{font-size:32px;margin:0;font-weight:800;letter-spacing:-.6px}
-.live{font-size:13px;color:#6e6e73;display:flex;align-items:center;gap:6px}
-.dot{width:8px;height:8px;border-radius:50%;background:#34c759;animation:p 1.6s infinite}.dot.off{background:#ff9f0a;animation:none}@keyframes p{50%{opacity:.3}}
-button{border:0;background:#fff;border-radius:20px;padding:9px 15px;font:inherit;font-size:14px;font-weight:600;color:#007aff;box-shadow:0 1px 4px #0001;cursor:pointer}
-.card{background:#fff;border-radius:24px;padding:20px;margin-bottom:14px;box-shadow:0 2px 14px #00000008}
-.hero{background:linear-gradient(135deg,#111827,#312e81 55%,#7c3aed);color:#fff;padding:24px 20px}
-.lbl{font-size:12px;color:#c7d2fe;text-transform:uppercase;letter-spacing:.7px;font-weight:700}
-.big{font-size:56px;font-weight:800;letter-spacing:-1.6px;margin:8px 0 10px;line-height:1;color:#fff}
-.pill{display:inline-block;padding:5px 12px;border-radius:99px;font-size:14px;font-weight:700}
-.up{background:#dcfce7;color:#15803d}.dn{background:#fee2e2;color:#dc2626}.nu{background:#f1f5f9;color:#64748b}
-.netline{margin-top:14px;font-size:17px;font-weight:650;color:#e0e7ff;line-height:1.45}
-.note{margin-top:7px;font-size:13px;color:#a5b4fc;line-height:1.5}
-.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
-.tile{background:#ffffff1c;border-radius:16px;padding:13px 14px;min-width:0}
-.tile span{display:block;font-size:12px;color:#c7d2fe;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
-.tile b{display:block;color:#fff;font-size:21px;margin-top:4px;white-space:nowrap;letter-spacing:-.3px}
+*{box-sizing:border-box}
+body{margin:0;background:#f5f5f7;font:17px -apple-system,BlinkMacSystemFont,"SF Pro Text",Helvetica,Arial,sans-serif;color:#1d1d1f;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);-webkit-font-smoothing:antialiased}
+main{max-width:680px;margin:0 auto;padding:22px 18px 32px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:2px 2px 18px}
+h1{font-size:28px;margin:0;font-weight:800;letter-spacing:-.5px}
+.live{font-size:13px;color:#6e6e73;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.dot{width:8px;height:8px;border-radius:50%;background:#34c759;animation:p 1.6s infinite;flex:none}.dot.off{background:#ff9f0a;animation:none}@keyframes p{50%{opacity:.3}}
+button{border:0;background:#fff;border-radius:99px;padding:9px 15px;font:inherit;font-size:14px;font-weight:600;color:#007aff;box-shadow:0 1px 4px #0001;cursor:pointer;white-space:nowrap}
+button:active{transform:scale(.97)}
+.card{background:#fff;border-radius:26px;padding:22px 20px;margin-bottom:14px;box-shadow:0 2px 16px #00000007}
+.hero{background:#111;color:#fff;padding:26px 22px 24px;margin-bottom:14px}
+.lbl{font-size:12px;color:#a1a1a6;text-transform:uppercase;letter-spacing:.8px;font-weight:700}
+.big{font-size:58px;font-weight:800;letter-spacing:-1.8px;margin:10px 0 8px;line-height:1;color:#fff}
+.netline{font-size:17px;font-weight:650;line-height:1.4;color:#fff}
+.netline .up{color:#30d158}.netline .dn{color:#ff6961}
+.netline .dim{color:#a1a1a6;font-weight:500}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.tile{background:#fff;border-radius:22px;padding:18px;box-shadow:0 2px 16px #00000007;min-width:0}
 .tile.wide{grid-column:span 2}
-.cashready{display:block;font-size:13px;font-weight:700;margin-top:5px;line-height:1.35;text-transform:none;letter-spacing:0}
-.cashready.ready{color:#86efac}.cashready.low{color:#fca5a5}
-.cashhint{display:block;font-size:12px;font-weight:500;margin-top:3px;line-height:1.4;color:#fcd34d;text-transform:none;letter-spacing:0}
-.hd{font-size:20px;font-weight:750;margin:0 0 6px;letter-spacing:-.3px}.hdsub{font-size:13px;color:#86868b;margin-bottom:4px}
-.row{display:flex;align-items:center;gap:12px;padding:13px 0;border-top:1px solid #f0f0f2;text-decoration:none;color:inherit}.row:first-of-type{border-top:0}
-.row img,.ph{width:44px;height:44px;border-radius:50%;background:#eef2ff;flex:none;object-fit:cover}
-.mid{flex:1;min-width:0}.sym{font-weight:700;font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.sub{font-size:13px;color:#6e6e73;line-height:1.4}
+.tlabel{font-size:12px;color:#6e6e73;font-weight:700;text-transform:uppercase;letter-spacing:.6px}
+.tval{display:block;font-size:26px;font-weight:800;letter-spacing:-.5px;margin-top:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tsub{display:block;font-size:13px;line-height:1.45;margin-top:5px;color:#6e6e73}
+.tsub.ready{color:#16a34a;font-weight:650}.tsub.low{color:#dc2626;font-weight:650}
+.up{color:#16a34a}.dn{color:#dc2626}
+.hdrow{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:4px}
+h2{font-size:20px;font-weight:750;margin:0;letter-spacing:-.3px}
+.count{font-size:13px;color:#86868b;white-space:nowrap}
+.hdsub{font-size:13px;color:#86868b;margin:2px 0 2px}
+.row{display:flex;align-items:center;gap:13px;padding:15px 0;border-top:1px solid #f0f0f2;text-decoration:none;color:inherit}.row:first-of-type{border-top:0}
+.row img,.ph{width:44px;height:44px;border-radius:50%;background:#f5f5f7;flex:none;object-fit:cover}
+.mid{flex:1;min-width:0}.sym{font-weight:700;font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sub{font-size:13px;color:#6e6e73;line-height:1.45}
 .r{text-align:right;flex:none}.val{font-weight:750;font-size:17px}
-.r .pill{font-size:11px;padding:3px 8px;margin-top:4px}
-.cb{font-size:12.5px;color:#86868b;white-space:nowrap;margin-top:2px}.cb.g{color:#16a34a}.cb.d{color:#dc2626}
-.tg{font-size:12.5px;color:#6e6e73;display:flex;align-items:center;gap:5px;margin-top:3px}.tg i,.tdot{width:8px;height:8px;border-radius:50%;display:inline-block;flex:none}
-.ev{display:flex;justify-content:space-between;gap:10px;font-size:14.5px;line-height:1.45;padding:10px 0;border-top:1px solid #f0f0f2}.ev.first{border-top:0}.ev time{font-size:12px;color:#86868b;white-space:nowrap;flex:none;padding-top:2px}
-.warn{background:#fff4e5;color:#8a5300;border-radius:14px;padding:11px 14px;font-size:14px;margin-bottom:12px;display:none;line-height:1.45}
-.tr{display:flex;align-items:center;gap:10px;padding:12px 0;border-top:1px solid #f0f0f2}.tr.first{border-top:0}.tr.paused{opacity:.45}
-.foot{font-size:12.5px;color:#86868b;margin-top:10px;line-height:1.55}.tw{font-size:13px;color:#8a5300;background:#fff4e5;border-radius:12px;padding:9px 12px;margin-top:10px;line-height:1.45}
-footer{font-size:12.5px;color:#86868b;text-align:center;margin:18px 8px;line-height:1.6}
-@media(min-width:520px){.tiles{grid-template-columns:1fr 1fr 1fr}.tile.wide{grid-column:span 1}}
+.cb{font-size:13px;color:#86868b;margin-top:3px;white-space:nowrap}.cb.g{color:#16a34a;font-weight:600}.cb.d{color:#dc2626;font-weight:600}
+.tg{font-size:13px;color:#6e6e73;display:flex;align-items:center;gap:6px;margin-top:3px}.tg i,.tdot{width:8px;height:8px;border-radius:50%;display:inline-block;flex:none}
+.status{font-size:12px;font-weight:700;padding:4px 10px;border-radius:99px;flex:none}
+.status.live{background:#e8f8ee;color:#16a34a}.status.paused{background:#f5f5f7;color:#86868b}
+.tr{display:flex;align-items:center;gap:11px;padding:14px 0;border-top:1px solid #f0f0f2}.tr:first-of-type{border-top:0}.tr.paused{opacity:.45}
+.ev{display:flex;justify-content:space-between;gap:12px;font-size:14.5px;line-height:1.5;padding:12px 0;border-top:1px solid #f0f0f2}.ev.first{border-top:0}.ev time{font-size:12px;color:#86868b;white-space:nowrap;flex:none;padding-top:3px;text-align:right}
+.warn{background:#fff4e5;color:#8a5300;border-radius:16px;padding:12px 15px;font-size:14px;margin-bottom:12px;display:none;line-height:1.45}
+.foot{font-size:12.5px;color:#86868b;margin-top:12px;line-height:1.55}
+.tw{font-size:13px;color:#8a5300;background:#fff4e5;border-radius:12px;padding:9px 12px;margin-top:10px;line-height:1.45}
+footer{font-size:12.5px;color:#86868b;text-align:center;margin:20px 8px 0;line-height:1.6}
+@media(min-width:560px){.tiles{grid-template-columns:repeat(3,1fr)}.tile.wide{grid-column:span 2}.big{font-size:64px}main{padding-top:28px}}
 </style></head><body><main>
-<div class="top"><h1>FOMO</h1><div style="display:flex;gap:10px;align-items:center"><span class="live"><span class="dot" id="dot"></span><span id="upd">Loading…</span></span><button id="ref">↻ Refresh</button></div></div>
+<div class="top"><h1>FOMO</h1><div style="display:flex;gap:10px;align-items:center"><span class="live"><span class="dot" id="dot"></span><span id="upd">Loading…</span></span><button id="ref" type="button">↻ Refresh</button></div></div>
 <div class="warn" id="warn"></div>
-<section class="card hero"><div class="lbl">Total balance</div><div class="big" id="total">—</div><span class="pill nu" id="pnl">—</span>
-<div class="netline" id="netline">Portfolio − deposited = —</div>
-<div class="note">Above or below deposited is your net P&amp;L. Deposit +$9.61 on Oct 18 is included.</div>
+
+<section class="card hero">
+<div class="lbl">Total balance</div>
+<div class="big" id="total">—</div>
+<div class="netline" id="netline">— vs deposited</div>
+</section>
+
 <div class="tiles">
-<div class="tile"><span>Deposited</span><b id="dep"></b></div>
-<div class="tile"><span>Cash · USDC</span><b id="cash">—</b><span class="cashready low" id="cashready">Checking cash…</span><span class="cashhint" id="cashhint">Needs $3.35 ($3 cap + $0.35 buffer) · Ideal $7–$10</span></div>
-<div class="tile"><span>Open P&amp;L</span><b id="opnl">—</b></div>
-<div class="tile"><span>Realized P&amp;L</span><b id="rpnl">—</b></div>
-<div class="tile"><span>Best coin</span><b id="best">—</b></div>
+<div class="tile"><span class="tlabel">Deposited</span><b class="tval" id="dep">—</b></div>
+<div class="tile"><span class="tlabel">Cash · USDC</span><b class="tval" id="cash">—</b><span class="tsub low" id="cashready">Checking cash…</span><span class="tsub" id="cashhint"></span></div>
+<div class="tile"><span class="tlabel">Open P&amp;L</span><b class="tval" id="opnl">—</b><span class="tsub">vs Paid, open coins</span></div>
+<div class="tile"><span class="tlabel">Realized P&amp;L</span><b class="tval" id="rpnl">—</b><span class="tsub">$CyberAxe · @aiwass</span></div>
+<div class="tile wide"><span class="tlabel">Best coin</span><b class="tval" id="best">—</b><span class="tsub">vs Paid</span></div>
 </div>
-<div class="note">Realized +$5.31 = $CyberAxe closed via @aiwass. Cash-ready needs $3.35 for one trade; ideal $7–$10.</div></section>
-<section class="card"><h2 class="hd">Holdings</h2><div class="hdsub" id="tokwrap"><span id="tok">—</span> open · tap a coin for DexScreener</div><div id="list"><div class="sub">Loading positions…</div></div><div class="foot">$VLAD (Robinhood chain, $3.09 via @aiwass) can’t be auto-tracked here — BSC/Base/Solana only, so it isn’t in the live total above.</div></section>
-<section class="card"><h2 class="hd">Copying</h2><div class="hdsub" id="copyhd">6 traders · live</div><div id="copylist"><div class="sub">Loading traders…</div></div><div class="foot" id="copyfoot"></div><div class="tw" id="copywarn" style="display:none"></div></section>
-<section class="card"><h2 class="hd">Recent activity</h2><div id="actlist"><div class="sub">Loading…</div></div></section>
-<footer>Live on-chain data · Jupiter, PublicNode RPC, DexScreener · refreshes every 15s<br>Same app, same Home Screen icon — just reopen FOMO.</footer>
-</main><script src="app.js?v20261018-deposit67-clean"></script></body></html>
+
+<section class="card"><div class="hdrow"><h2>Holdings</h2><span class="count" id="tokwrap"><span id="tok">—</span> open</span></div><div class="hdsub">Tap a coin for DexScreener</div><div id="list"><div class="sub">Loading positions…</div></div><div class="foot">$VLAD (Robinhood, via @aiwass) isn’t tracked live here — BSC / Base / Solana only, so it’s not in the total above.</div></section>
+
+<section class="card"><div class="hdrow"><h2>Copying</h2><span class="count" id="copyhd">Loading…</span></div><div id="copylist"><div class="sub">Loading traders…</div></div><div class="foot" id="copyfoot"></div><div class="tw" id="copywarn" style="display:none"></div></section>
+
+<section class="card"><h2 style="margin-bottom:4px">Recent activity</h2><div id="actlist"><div class="sub">Loading…</div></div></section>
+
+<footer>Live on-chain data · Jupiter · PublicNode · DexScreener · refreshes every 15s</footer>
+</main><script src="app.js?v20261018-clean-simple"></script></body></html>
