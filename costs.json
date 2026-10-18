@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-16T17:15:00Z",
+ "updated": "2026-10-18T16:40:00Z",
  "coins": {
   "FL4eKdJrVZ1dVu1RoekeQRnuPxavzD4oCcR5HTcspump": {
    "sym": "CINEMA",
@@ -48,6 +48,11 @@
   },
   "3nTmaNvUd12oEd52rsjc8hZLqSjRm1yoEtCnZBDRpump": {
    "sym": "VERITY",
+   "cost": 3.0,
+   "trader": "aiwass"
+  },
+  "cTxqg4vt21u1Q2f9DSEig6S1fxmxLSsUV2v2wWspump": {
+   "sym": "ECASH",
    "cost": 3.0,
    "trader": "aiwass"
   }
