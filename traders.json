@@ -1,47 +1,68 @@
 {
- "updated": "2026-10-15T12:44:56.474992+00:00",
+ "updated": "2026-10-19T09:53:29.582450+00:00",
  "traders": [
   {
    "handle": "Quanterty",
-   "status": "live",
+   "status": "paused",
    "size": "25% of buy, max $3",
    "chains": "7 chains",
-   "note": ""
+   "note": "paused 2026-10-19 (failed 7D rules)"
   },
   {
    "handle": "Oura456",
-   "status": "live",
+   "status": "paused",
    "size": "25% of buy, max $3",
    "chains": "Solana only",
-   "note": ""
+   "note": "paused 2026-10-19 (failed 7D rules)"
   },
   {
    "handle": "Hifive_07",
-   "status": "live",
+   "status": "paused",
    "size": "25% of buy, max $3",
    "chains": "7 chains",
-   "note": ""
+   "note": "paused 2026-10-19 (failed 7D rules)"
   },
   {
    "handle": "aiwass",
-   "status": "live",
+   "status": "paused",
    "size": "25% of buy, max $3",
    "chains": "7 chains",
-   "note": ""
+   "note": "paused 2026-10-19 (failed 7D rules)"
   },
   {
    "handle": "sugar",
-   "status": "live",
+   "status": "paused",
    "size": "25% of buy, max $3",
    "chains": "7 chains",
-   "note": "#45 7D, 64% win"
+   "note": "#45 7D, 64% win; paused 2026-10-19 (failed 7D rules)"
   },
   {
    "handle": "UltraMegaWizard",
-   "status": "live",
+   "status": "paused",
    "size": "25% of buy, max $3",
    "chains": "7 chains",
-   "note": "replaced @adolf"
+   "note": "replaced @adolf; paused 2026-10-19 (failed 7D rules)"
+  },
+  {
+   "handle": "Mudo9453",
+   "status": "live",
+   "size": "25% of buy, max $3",
+   "chains": "7 chains (skips Ethereum)",
+   "note": "#25 7D, 42% win, 831 swaps"
+  },
+  {
+   "handle": "Numerooo0",
+   "status": "live",
+   "size": "25% of buy, max $3",
+   "chains": "7 chains (skips Ethereum)",
+   "note": "#33 7D, 49% win, 515 swaps"
+  },
+  {
+   "handle": "wenaltseason",
+   "status": "live",
+   "size": "25% of buy, max $3",
+   "chains": "7 chains (skips Ethereum)",
+   "note": "#45 7D, 63% win, 129 swaps"
   }
  ]
 }
