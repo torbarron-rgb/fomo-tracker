@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-19T09:53:29.582450+00:00",
+ "updated": "2026-10-19T18:58:45.011869+00:00",
  "traders": [
   {
    "handle": "Quanterty",
@@ -45,10 +45,10 @@
   },
   {
    "handle": "Mudo9453",
-   "status": "live",
+   "status": "paused",
    "size": "25% of buy, max $3",
    "chains": "7 chains (skips Ethereum)",
-   "note": "#25 7D, 42% win, 831 swaps"
+   "note": "paused 2026-10-19 after 3 straight closed losses (-$3.10)"
   },
   {
    "handle": "Numerooo0",
@@ -63,6 +63,34 @@
    "size": "25% of buy, max $3",
    "chains": "7 chains (skips Ethereum)",
    "note": "#45 7D, 63% win, 129 swaps"
+  },
+  {
+   "handle": "cheekssss",
+   "status": "live",
+   "size": "25% of buy, max $3",
+   "chains": "Solana only",
+   "note": "#16 7D, 94% win, 295 swaps; added 2026-10-19"
+  },
+  {
+   "handle": "vvvvvvvvvv",
+   "status": "live",
+   "size": "25% of buy, max $3",
+   "chains": "7 chains (skips Ethereum)",
+   "note": "#42 7D, 41% win; added 2026-10-19"
+  },
+  {
+   "handle": "IceSlayerMan",
+   "status": "live",
+   "size": "25% of buy, max $3",
+   "chains": "7 chains (skips Ethereum)",
+   "note": "#45 7D, 55% win; added 2026-10-19"
+  },
+  {
+   "handle": "zackory",
+   "status": "live",
+   "size": "25% of buy, max $3",
+   "chains": "7 chains (skips Ethereum)",
+   "note": "#50 7D, 40% win; added 2026-10-19"
   }
  ]
 }
