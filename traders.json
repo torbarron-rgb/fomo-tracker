@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-19T18:58:45.011869+00:00",
+ "updated": "2026-10-26T08:54:21.966003+00:00",
  "traders": [
   {
    "handle": "Quanterty",
@@ -52,45 +52,73 @@
   },
   {
    "handle": "Numerooo0",
-   "status": "live",
+   "status": "paused",
    "size": "25% of buy, max $3",
    "chains": "7 chains (skips Ethereum)",
-   "note": "#33 7D, 49% win, 515 swaps"
+   "note": "#33 7D, 49% win, 515 swaps; paused 2026-10-26 (out of 7D top 50)"
   },
   {
    "handle": "wenaltseason",
-   "status": "live",
+   "status": "paused",
    "size": "25% of buy, max $3",
    "chains": "7 chains (skips Ethereum)",
-   "note": "#45 7D, 63% win, 129 swaps"
+   "note": "#45 7D, 63% win, 129 swaps; paused 2026-10-26 (out of 7D top 50)"
   },
   {
    "handle": "cheekssss",
-   "status": "live",
+   "status": "paused",
    "size": "25% of buy, max $3",
    "chains": "Solana only",
-   "note": "#16 7D, 94% win, 295 swaps; added 2026-10-19"
+   "note": "#16 7D, 94% win, 295 swaps; added 2026-10-19; paused 2026-10-26 (out of 7D top 50)"
   },
   {
    "handle": "vvvvvvvvvv",
-   "status": "live",
+   "status": "paused",
    "size": "25% of buy, max $3",
    "chains": "7 chains (skips Ethereum)",
    "note": "#42 7D, 41% win; added 2026-10-19"
   },
   {
    "handle": "IceSlayerMan",
-   "status": "live",
+   "status": "paused",
    "size": "25% of buy, max $3",
    "chains": "7 chains (skips Ethereum)",
-   "note": "#45 7D, 55% win; added 2026-10-19"
+   "note": "#45 7D, 55% win; added 2026-10-19; paused 2026-10-26 (out of 7D top 50)"
   },
   {
    "handle": "zackory",
+   "status": "paused",
+   "size": "25% of buy, max $3",
+   "chains": "7 chains (skips Ethereum)",
+   "note": "#50 7D, 40% win; added 2026-10-19; paused 2026-10-26 (out of 7D top 50)"
+  },
+  {
+   "handle": "rasmr",
    "status": "live",
    "size": "25% of buy, max $3",
    "chains": "7 chains (skips Ethereum)",
-   "note": "#50 7D, 40% win; added 2026-10-19"
+   "note": "#29 7D, 60% win, 146 swaps, +$54K realized; added 2026-10-26"
+  },
+  {
+   "handle": "gtsb",
+   "status": "live",
+   "size": "25% of buy, max $3",
+   "chains": "Solana only",
+   "note": "#42 7D, 62% win, 157 swaps, +$42.7K realized; added 2026-10-26"
+  },
+  {
+   "handle": "horseimnot",
+   "status": "live",
+   "size": "25% of buy, max $3",
+   "chains": "7 chains (skips Ethereum)",
+   "note": "#47 7D, 49% win, 155 swaps, +$24.1K realized; added 2026-10-26"
+  },
+  {
+   "handle": "OinkersRUs",
+   "status": "live",
+   "size": "25% of buy, max $3",
+   "chains": "7 chains (skips Ethereum)",
+   "note": "#49 7D, 69% win, 267 swaps, +$52.8K realized; added 2026-10-26"
   }
  ]
 }
