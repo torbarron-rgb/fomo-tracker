@@ -20,7 +20,7 @@ const USDC_SOL = "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v";
 const WSOL = "So11111111111111111111111111111111111111112";
 // ============================
 
-const APP_VERSION = "20261028-1735-84ng"; // Keep in sync with version.json + index.html ?v=
+const APP_VERSION = "20261028-1800-clean"; // Keep in sync with version.json + index.html ?v=
 async function checkUpdate() {
   try {
     const r = await fetch(`version.json?t=${Date.now()}`, { cache: "no-store" });
@@ -40,7 +40,7 @@ const TCOL = ["#007aff","#ff9500","#af52de","#34c759","#ff2d55","#5ac8fa","#a284
 const tcol = t => { let h = 0; for (const ch of String(t)) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return TCOL[h % TCOL.length]; };
 const sgn = n => (n >= 0 ? "+" : "−") + fmt(Math.abs(n));
 $("dep").textContent = fmt(DEPOSITED_USD);
-if ($("rpnl")) { $("rpnl").textContent = sgn(REALIZED_PNL_USD); $("rpnl").style.color = REALIZED_PNL_USD >= 0 ? "#16a34a" : "#dc2626"; }
+if ($("rpnl")) { $("rpnl").textContent = sgn(REALIZED_PNL_USD); $("rpnl").style.color = REALIZED_PNL_USD >= 0 ? "#15803d" : "#dc2626"; }
 
 async function j(url, opts) {
   const r = await fetch(url, { cache: "no-store", ...opts });
@@ -99,19 +99,19 @@ function render(items, errs) {
   $("cash").textContent = fmt(cash);
   if ($("cashready")) {
     const need = CASH_NEED_USD, short = need - cash, ready = cash >= need;
-    $("cashready").textContent = ready ? "\u2713 Ready for next trade" : `Need ${fmt(short)} more for next trade`;
+    $("cashready").textContent = ready ? "Ready for next trade" : `Need ${fmt(short)} more for next trade`;
     $("cashready").className = "tsub " + (ready ? "ready" : "low");
     if ($("cashhint")) $("cashhint").textContent = ready
       ? (cash < IDEAL_CASH_MIN_USD ? `Ideal ${fmt(IDEAL_CASH_MIN_USD)}\u2013${fmt(IDEAL_CASH_MAX_USD)} for buffer` : "")
       : `Needs ${fmt(need)} (${fmt(MAX_CAP_USD)} cap + ${fmt(TRADE_FEE_BUFFER_USD)} buffer) \u00b7 Ideal ${fmt(IDEAL_CASH_MIN_USD)}\u2013${fmt(IDEAL_CASH_MAX_USD)}`;
   }
   if ($("netline")) $("netline").innerHTML = `<span class="${pnl >= 0 ? "up" : "dn"}">${sgn(pnl)} (${pnl >= 0 ? "+" : ""}${pct.toFixed(2)}%)</span> <span class="dim">vs ${fmt(DEPOSITED_USD)} deposited</span>`;
-  if ($("netval")) { $("netval").textContent = sgn(pnl); $("netval").style.color = pnl >= 0 ? "#16a34a" : "#dc2626"; }
+  if ($("netval")) { $("netval").textContent = sgn(pnl); $("netval").style.color = pnl >= 0 ? "#15803d" : "#dc2626"; }
   const shown = items.filter(x => !x.cash && x.usd >= DUST_USD).sort((a, b) => b.usd - a.usd);
   if ($("tok")) $("tok").textContent = shown.length;
   let open = 0, best = null;
   shown.forEach(x => { const c = COSTS[(x.addr || "").toLowerCase()]; x.cb = c; if (c && c.cost != null) { x.gain = x.usd - c.cost; open += x.gain; if (!best || x.gain / c.cost > best.g) best = { s: x.sym, g: x.gain / c.cost }; } });
-  $("opnl").textContent = sgn(open); $("opnl").style.color = open >= 0 ? "#16a34a" : "#dc2626";
+  $("opnl").textContent = sgn(open); $("opnl").style.color = open >= 0 ? "#15803d" : "#dc2626";
   $("best").textContent = best ? `${best.s} ${best.g >= 0 ? "+" : ""}${(best.g * 100).toFixed(0)}%` : "—";
   $("list").innerHTML = shown.length ? shown.map(x => {
     const esc = s => String(s).replace(/[&<>"]/g, m => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[m]));
@@ -131,7 +131,7 @@ async function loadTraders() {
     $("copywarn").style.display = "none";
   } catch (e) {
     $("copywarn").style.display = "block";
-    $("copywarn").textContent = "⚠️ Couldn't load traders list" + (lastTraders ? " — showing last loaded." : ".") + " (" + (e.message || e) + ")";
+    $("copywarn").textContent = "Couldn't load traders list" + (lastTraders ? " — showing last loaded." : ".") + " (" + (e.message || e) + ")";
     if (!lastTraders) { $("copylist").innerHTML = ""; return; }
   }
   const ts = (lastTraders.traders || []).slice().sort((a, b) => (a.status === "live" ? 0 : 1) - (b.status === "live" ? 0 : 1));
@@ -160,7 +160,7 @@ function ago() { if (!lastOk) return; const s = Math.round((Date.now() - lastOk)
 let stale = false;
 async function refresh() {
   loadTraders(); await loadData();
-  $("ref").textContent = "↻ …";
+  $("ref").textContent = "Updating…";
   const res = await Promise.allSettled([loadSolana(), loadEvm()]);
   const errs = res.filter(r => r.status === "rejected").map(r => r.reason?.message || r.reason);
   last = last || [[], []];
@@ -168,10 +168,10 @@ async function refresh() {
   render(last.flat(), errs);
   if (!errs.length) lastOk = Date.now();
   $("warn").style.display = errs.length ? "block" : "none";
-  $("warn").textContent = errs.length ? "⚠️ Some data failed to update — showing last good data. (" + errs.join("; ") + ")" : "";
+  $("warn").textContent = errs.length ? "Some data failed to update — showing last good data. (" + errs.join("; ") + ")" : "";
   $("dot").className = "dot" + (errs.length ? " off" : "");
   stale = !!errs.length; if (!lastOk) $("upd").textContent = "Offline"; ago();
-  $("ref").textContent = "↻ Refresh";
+  $("ref").textContent = "Refresh";
 }
 $("ref").onclick = refresh;
 refresh(); setInterval(refresh, REFRESH_MS); setInterval(ago, 1000);
