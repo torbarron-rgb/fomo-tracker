@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-28T11:24:03.272125+00:00",
+ "updated": "2026-10-28T21:51:15.783064+00:00",
  "traders": [
   {
    "handle": "Quanterty",
@@ -129,10 +129,10 @@
   },
   {
    "handle": "0xstanczyk",
-   "status": "live",
+   "status": "paused",
    "size": "25% of buy, max $3",
    "chains": "7 chains",
-   "note": "#3 7D, 55% win, 316 trades, +$313.3K \u00b7 added 10-28"
+   "note": "#3 7D, 55% win, 316 trades, +$313.3K \u00b7 added 10-28 \u00b7 paused 10-28 after 2 straight CLUTCH losses (Mirror Sells On)"
   },
   {
    "handle": "_benjitrades",
@@ -140,6 +140,13 @@
    "size": "25% of buy, max $3",
    "chains": "7 chains",
    "note": "#5 7D, 56% win, 562 trades, +$421.9K \u00b7 added 10-28"
+  },
+  {
+   "handle": "ImBrentJames",
+   "status": "live",
+   "size": "25% of buy, max $3",
+   "chains": "7 chains",
+   "note": "#5 7D, 50% win, 72 swaps \u00b7 added 10-28"
   }
  ]
 }
