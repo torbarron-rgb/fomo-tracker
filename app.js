@@ -1,6 +1,6 @@
 // ===== Config (edit me) =====
 const DEPOSITED_USD = 67.13; // Total deposited: $57.52 + $9.61 detected Oct 18 ~13:36 UTC (USDC $0.88 -> $10.491276 on-chain via Jupiter, SOL 0, no holdings sold)
-const REALIZED_PNL_USD = 5.31; // Realized: $CyberAxe closed via @aiwass (+195%)
+const REALIZED_PNL_USD = -14.24; // Dawn realised −$14.24 on $94.02 invested (read ~15:45 UTC 28 Oct); cash-floor sells after ~15:45 UTC (VERITY/CINEMA/DREAM, ~−$3.28) not yet reflected
 // Note: $VLAD (Robinhood chain, $3.09 via @aiwass) is not auto-tracked — EVM_TOKENS only covers BSC/Base, so don't invent tracking for it.
 const SOL_WALLET = "7BQKwDkic5gjQmFRJwiAr7P4KrYzAmBHUEaCv7yXb4sP";
 const EVM_WALLET = "0x789d01bc529eE2346A4F6abF78a6D37F1B3B770B";
@@ -20,7 +20,7 @@ const USDC_SOL = "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v";
 const WSOL = "So11111111111111111111111111111111111111112";
 // ============================
 
-const APP_VERSION = "20261018-1344-7had"; // Keep in sync with version.json + index.html ?v=
+const APP_VERSION = "20261028-1735-84ng"; // Keep in sync with version.json + index.html ?v=
 async function checkUpdate() {
   try {
     const r = await fetch(`version.json?t=${Date.now()}`, { cache: "no-store" });
