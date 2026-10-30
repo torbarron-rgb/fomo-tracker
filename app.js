@@ -1,7 +1,7 @@
 // ===== Config (edit me) =====
 const DEPOSITED_USD = 67.13; // Total deposited: $57.52 + $9.61 detected Oct 18 ~13:36 UTC (USDC $0.88 -> $10.491276 on-chain via Jupiter, SOL 0, no holdings sold)
-const REALIZED_PNL_USD = -14.24; // Dawn realised −$14.24 on $94.02 invested (read ~15:45 UTC 28 Oct); cash-floor sells after ~15:45 UTC (VERITY/CINEMA/DREAM, ~−$3.28) not yet reflected
-// Note: $VLAD (Robinhood chain, $3.09 via @aiwass) is not auto-tracked — EVM_TOKENS only covers BSC/Base, so don't invent tracking for it.
+const REALIZED_PNL_USD = -21.81; // Dawn realised −$21.81 on $268.09 invested (06:15 Madrid 30 Oct); 08:11 PIZZA 50% sell not yet reflected
+// Robinhood chain is tracked via EVM_TOKENS (PIZZA).
 const SOL_WALLET = "7BQKwDkic5gjQmFRJwiAr7P4KrYzAmBHUEaCv7yXb4sP";
 const EVM_WALLET = "0x789d01bc529eE2346A4F6abF78a6D37F1B3B770B";
 const MAX_CAP_USD = 3; // Cap per trade (single source for cash-ready check)
@@ -9,18 +9,23 @@ const TRADE_FEE_BUFFER_USD = 0.35; // Fee/slippage buffer on top of cap
 const CASH_NEED_USD = MAX_CAP_USD + TRADE_FEE_BUFFER_USD; // $3.35 needed for one trade
 const IDEAL_CASH_MIN_USD = 7, IDEAL_CASH_MAX_USD = 10; // Ideal cash buffer hint
 const REFRESH_MS = 15000;
-const DUST_USD = 0.01;
+const DUST_USD = 0.10; // Holdings under $0.10 are dust: hidden and excluded from Total
+const SANITY_MAX_USD = DEPOSITED_USD; // A position with no cost basis priced above this is treated as a bad price (excluded)
+// Only trust DexScreener pairs quoted in these majors (a ZEC/AVEN pool once priced ZEC at $6.2M -> 0.0000187 ZEC = $116)
+const GOOD_QUOTES = new Set(["SOL","WSOL","USDC","USDT","USDG","USD1","PYUSD","WETH","ETH","WBNB","BNB","CBBTC","WBTC"]);
 // EVM tokens can't be auto-discovered keylessly; list contracts to check here (chain: "bsc" | "base").
 const EVM_TOKENS = [
   { chain: "bsc", address: "0x14F6A94909C407854390Aa2d2462a3095D317777" }, // 旺柴 WangChai
+  { chain: "robinhood", address: "0xd086f891229cD123aAdfCAe7C4b40150A80fd9D7" }, // PIZZA (Robinhood chain)
 ];
-const EVM_RPC = { bsc: "https://bsc-rpc.publicnode.com", base: "https://base-rpc.publicnode.com" };
-const NATIVE = { bsc: { sym: "BNB", wrapped: "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c" }, base: { sym: "ETH", wrapped: "0x4200000000000000000000000000000000000006" } };
+const EVM_RPC = { bsc: "https://bsc-rpc.publicnode.com", base: "https://base-rpc.publicnode.com", robinhood: "https://robinhood-rpc.publicnode.com" };
+const NATIVE = { bsc: { sym: "BNB", wrapped: "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c" }, base: { sym: "ETH", wrapped: "0x4200000000000000000000000000000000000006" }, robinhood: { sym: "ETH", wrapped: null } };
+const CHAIN_NAME = { bsc: "BNB Chain", base: "Base", robinhood: "Robinhood" };
 const USDC_SOL = "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v";
 const WSOL = "So11111111111111111111111111111111111111112";
 // ============================
 
-const APP_VERSION = "20261028-1800-clean"; // Keep in sync with version.json + index.html ?v=
+const APP_VERSION = "20261030-0820-dustfix"; // Keep in sync with version.json + index.html ?v=
 async function checkUpdate() {
   try {
     const r = await fetch(`version.json?t=${Date.now()}`, { cache: "no-store" });
@@ -55,6 +60,7 @@ async function dexPrices(chain, addrs) {
     const pairs = await j(`https://api.dexscreener.com/tokens/v1/${chain}/${addrs.slice(i, i + 30).join(",")}`);
     for (const p of pairs) {
       const a = p.baseToken.address.toLowerCase(), liq = p.liquidity?.usd || 0;
+      if (!GOOD_QUOTES.has(String(p.quoteToken?.symbol || "").toUpperCase())) continue; // skip exotic-quote pools (bad prices)
       if (!out[a] || liq > out[a].liq) out[a] = { liq, price: +p.priceUsd || 0, ch: p.priceChange?.h24, url: p.url, img: p.info?.imageUrl, sym: p.baseToken.symbol, name: p.baseToken.name };
     }
   }
@@ -64,7 +70,12 @@ async function dexPrices(chain, addrs) {
 async function loadSolana() {
   const bal = await j(`https://lite-api.jup.ag/ultra/v1/balances/${SOL_WALLET}`);
   const mints = Object.keys(bal).map(k => k === "SOL" ? WSOL : k);
-  const px = await dexPrices("solana", mints);
+  const px = await dexPrices("solana", mints).catch(() => ({}));
+  // Jupiter price is aggregated across routes; prefer it over a single DexScreener pair
+  try {
+    const jp = await j(`https://lite-api.jup.ag/price/v3?ids=${mints.slice(0, 50).join(",")}`);
+    for (const [m, v] of Object.entries(jp || {})) if (v && v.usdPrice > 0) { const k = m.toLowerCase(); px[k] = { ...(px[k] || {}), price: +v.usdPrice }; }
+  } catch (e) {}
   return Object.entries(bal).map(([k, v]) => {
     const mint = k === "SOL" ? WSOL : k, p = px[mint.toLowerCase()] || {};
     const amt = v.uiAmount || 0;
@@ -81,19 +92,22 @@ async function loadEvm() {
       rpc(EVM_RPC[chain], "eth_getBalance", [EVM_WALLET, "latest"]),
       ...toks.flatMap(t => [rpc(EVM_RPC[chain], "eth_call", [{ to: t.address, data }, "latest"]), t.decimals != null ? t.decimals : rpc(EVM_RPC[chain], "eth_call", [{ to: t.address, data: "0x313ce567" }, "latest"]).then(h => parseInt(h, 16))])
     ]);
-    const px = await dexPrices(chain, [NATIVE[chain].wrapped, ...toks.map(t => t.address)]);
-    const n = Number(BigInt(nat)) / 1e18, np = px[NATIVE[chain].wrapped.toLowerCase()] || {};
-    out.push({ chain: chain === "bsc" ? "BNB Chain" : "Base", sym: NATIVE[chain].sym, amt: n, usd: n * (np.price || 0), ch: np.ch, url: np.url, img: np.img });
+    const px = await dexPrices(chain, [NATIVE[chain].wrapped, ...toks.map(t => t.address)].filter(Boolean));
+    const n = Number(BigInt(nat)) / 1e18, np = (NATIVE[chain].wrapped && px[NATIVE[chain].wrapped.toLowerCase()]) || {};
+    out.push({ chain: CHAIN_NAME[chain], sym: NATIVE[chain].sym, amt: n, usd: n * (np.price || 0), ch: np.ch, url: np.url, img: np.img });
     toks.forEach((t, i) => {
       const amt = Number(BigInt(raws[i * 2])) / 10 ** raws[i * 2 + 1], p = px[t.address.toLowerCase()] || {};
-      out.push({ chain: chain === "bsc" ? "BNB Chain" : "Base", sym: p.sym || t.address.slice(0, 6), amt, usd: amt * (p.price || 0), ch: p.ch, url: p.url || `https://dexscreener.com/${chain}/${t.address}`, img: p.img, addr: t.address });
+      out.push({ chain: CHAIN_NAME[chain], sym: p.sym || t.address.slice(0, 6), amt, usd: amt * (p.price || 0), ch: p.ch, url: p.url || `https://dexscreener.com/${chain}/${t.address}`, img: p.img, addr: t.address });
     });
   }
   return out;
 }
 
 function render(items, errs) {
-  const total = items.reduce((s, x) => s + x.usd, 0), cash = items.filter(x => x.cash).reduce((s, x) => s + x.usd, 0);
+  // Drop bad prices: no cost basis and implausibly large vs everything deposited
+  items = items.filter(x => x.cash || x.usd <= SANITY_MAX_USD || COSTS[(x.addr || "").toLowerCase()]);
+  // Dust (< $0.10) never counts toward Total
+  const total = items.filter(x => x.cash || x.usd >= DUST_USD).reduce((s, x) => s + x.usd, 0), cash = items.filter(x => x.cash).reduce((s, x) => s + x.usd, 0);
   const pnl = total - DEPOSITED_USD, pct = pnl / DEPOSITED_USD * 100;
   $("total").textContent = fmt(total);
   $("cash").textContent = fmt(cash);
