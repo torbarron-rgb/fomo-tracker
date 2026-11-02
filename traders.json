@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-30T08:30:00+01:00",
+  "updated": "2026-11-02T09:51:00+01:00",
   "traders": [
     {
       "handle": "Quanterty",
@@ -115,10 +115,10 @@
     },
     {
       "handle": "OinkersRUs",
-      "status": "live",
+      "status": "paused",
       "size": "25% of buy, max $3",
       "chains": "7 chains",
-      "note": "recovery 1-live; TP layered 50%@+100% + 25%@+300%; SL off"
+      "note": "paused 11-02 (out of 7D top 50)"
     },
     {
       "handle": "bystevenr",
@@ -147,6 +147,13 @@
       "size": "25% of buy, max $3",
       "chains": "7 chains",
       "note": "paused 30 Oct recovery (Mirror Sells On)"
+    },
+    {
+      "handle": "G41T3R98",
+      "status": "live",
+      "size": "25% of buy, max $3",
+      "chains": "7 chains",
+      "note": "#2 7D, 76% win, 41 swaps, +$257.7K \u00b7 added 11-02"
     }
   ],
   "live": [
